@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 const activeIndex = ref('/')
+onMounted(() => {
+  console.log(window.location)
+
+  activeIndex.value = window.location.pathname
+})
 const handleSelect = (key: string, keyPath: string) => {
   console.log(key, keyPath)
 }

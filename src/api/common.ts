@@ -37,3 +37,7 @@ export const getOtherWeather = async () => {
   const res = await fetch('https://api.oioweb.cn/api/weather/GetWeather')
   return await res.json()
 }
+
+export const getWebSiteList = async (params: object) => {
+  return await http.get('/api/webSite/list', params)
+}

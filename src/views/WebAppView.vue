@@ -11,30 +11,28 @@
         <h1 style="font-size: 18px; font-weight: bold">{{ item.title }}</h1>
         <p style="font-size: 14px; color: #374151">{{ item.description }}</p>
         <!-- <div class="web-app-link">前往>></div> -->
-        <el-link>前往>></el-link>
+        <el-link :href="item.webUrl" target="_blank">前往>></el-link>
       </el-card>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
-const webAppList = ref([
-  {
-    title: 'GitHub',
-    url: 'https://github.com/',
-    description: 'xx',
-  },
-  {
-    title: 'Gitee',
-    url: 'https://gitee.com/',
-    description: 'xxx',
-  },
-  {
-    title: 'Gitee',
-    url: 'https://gitee.com/',
-    description: 'xxx',
-  },
-])
+import { ref, onMounted } from 'vue'
+import { getWebSiteList } from '@/api/common'
+
+interface WebAppItem {
+  title: string
+  description: string
+  webUrl: string
+}
+
+const webAppList = ref<WebAppItem[]>([])
+
+onMounted(() => {
+  getWebSiteList({}).then((res: { data: WebAppItem[] }) => {
+    webAppList.value = res.data
+  })
+})
 </script>
 <style lang="scss" scoped>
 .web-app-view {

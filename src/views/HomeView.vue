@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <!-- <DynamicBackground /> -->
+    <DynamicBackground />
     <div class="user-info">
       <h2 style="font-size: 48px">Hello!👋</h2>
       <h1 style="font-size: 60px">世界因你而精彩！</h1>
@@ -41,7 +41,7 @@ import { debounce } from 'lodash-es'
 import Weather from '@/components/Weather.vue'
 import { getCurrentTime } from '@/utils/getTime'
 import imgUrl from '@/assets/1.jpg'
-// import DynamicBackground from '../components/DynamicBackground.vue'
+import DynamicBackground from '../components/DynamicBackground.vue'
 const state = reactive({
   circleUrl: imgUrl,
 })
