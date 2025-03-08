@@ -4,7 +4,7 @@
     <div class="user-info">
       <h2 style="font-size: 48px">Hello!👋</h2>
       <h1 style="font-size: 60px">世界因你而精彩！</h1>
-      <div class="hitokoto cards" @click.stop>
+      <div class="hitokoto v-cards" @click.stop>
         <!-- 一言内容 -->
         <Transition name="el-fade-in-linear" mode="out-in">
           <div :key="hitokotoData.text" class="content" @click="updateHitokoto">
@@ -13,7 +13,7 @@
           </div>
         </Transition>
       </div>
-      <div class="dateBox cards" style="margin-top: 10px">
+      <div class="dateBox v-cards" style="margin-top: 10px">
         <div class="time">
           <div class="date">
             <span>{{ currentTime.year }}&nbsp;年&nbsp;</span>
@@ -129,19 +129,7 @@ onBeforeUnmount(() => {
   // height: 100%;
 }
 // 卡片样式
-.cards {
-  border-radius: 6px;
-  background-color: #00000010;
-  backdrop-filter: blur(10px);
-  transform: scale(1);
-  transition: backdrop-filter 0.3s, transform 0.3s;
-  &:hover {
-    transform: scale(1.01);
-  }
-  &:active {
-    transform: scale(0.98);
-  }
-}
+
 .hitokoto {
   width: 100%;
   height: 100%;
