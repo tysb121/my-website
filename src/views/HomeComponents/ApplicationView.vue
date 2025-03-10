@@ -1,6 +1,6 @@
 <template>
-  <div style="width: 100%">
-    <el-row :gutter="20" style="flex-wrap: wrap">
+  <div style="width: 95%">
+    <el-row>
       <el-col
         v-for="(item, index) in appList"
         :key="index"
@@ -9,9 +9,10 @@
         :md="12"
         :lg="6"
         :xl="6"
+        style="padding: 6px"
       >
         <div class="app-item">
-          <el-image :src="item.imgSrc" style="opacity: 0.8;"></el-image>
+          <el-image :src="item.imgSrc" style="opacity: 0.8"></el-image>
           <div class="app-item-title">{{ item.title }}</div>
           <div class="app-item-desc">{{ item.desc }}</div>
           <div class="app-item-btn">
@@ -72,13 +73,16 @@ onMounted(() => {
   transition-property: box-shadow, opacity, background;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 0;
+  border-color: rgba(0, 0, 0, 0.12);
+  border-style: solid;
+  border-width: 0px;
   .app-item-title {
     line-height: 1.6;
     font-size: 1.1rem;
     padding: 3.2px 12.8px;
     font-weight: 500;
     hyphens: auto;
-    letter-spacing: .0125em;
+    letter-spacing: 0.0125em;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -92,7 +96,7 @@ onMounted(() => {
     padding: 2.4px 9.6px;
     line-height: 1.4;
     // font-weight: 400;
-    letter-spacing: .0178571429em;
+    letter-spacing: 0.0178571429em;
     opacity: 0.6;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -106,19 +110,19 @@ onMounted(() => {
     align-items: center;
   }
 }
-.btn{
-    display: inline-block;
-    // padding: 10px;
-    height: 36px;
-    padding: 0 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    cursor: pointer;
-    border-radius: 5px;
-    &:hover{
-        background-color: rgba($color: #fff, $alpha: 0.1);
-    }
+.btn {
+  display: inline-block;
+  // padding: 10px;
+  height: 36px;
+  padding: 0 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 5px;
+  &:hover {
+    background-color: rgba($color: #fff, $alpha: 0.1);
+  }
 }
 </style>

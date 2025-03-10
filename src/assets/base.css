@@ -34,6 +34,8 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  --background-image-url:url("./img/wallpaper/static/海洋女孩/image.png");
 }
 
 @media (prefers-color-scheme: dark) {

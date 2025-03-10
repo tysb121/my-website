@@ -13,7 +13,8 @@
           <Footer />
         </el-col>
         <el-col class="right-container" :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
-          <div class="welcometitle">Hi, I'm Kenny</div>
+          <!-- <div class="welcometitle">Hi, I'm Kenny</div> -->
+          <div class="welcometitle" v-if="!isMobileDevice">Hi, I'm KOBE</div>
           <el-row style="width: 100%" :gutter="24">
             <el-col :xs="24" :sm="24" :md="24" :lg="16" :xl="16">
               <hitokoto />
@@ -43,15 +44,68 @@ import Footer from './HomeComponents/Footer.vue'
 import DateWeather from '@/components/DateWeather.vue'
 import hitokoto from '@/components/hitokoto.vue'
 import ApplicationView from './HomeComponents/applicationView.vue'
-import imgUrl from '@/assets/1.jpg'
-import { reactive, toRefs } from 'vue'
+import imgUrl from '@/assets/3.jpg'
+import { reactive, toRefs, onBeforeMount, computed } from 'vue'
 import { Icon } from '@vicons/utils'
 import { Link } from '@vicons/fa' // 注意使用正确的类别
 
 const state = reactive({
   circleUrl: imgUrl,
+  lastSelectedIndex: -1,
 })
-const { circleUrl } = toRefs(state)
+const { circleUrl, lastSelectedIndex } = toRefs(state)
+
+// 计算属性来判断是否为移动端
+const isMobileDevice = computed(() => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+})
+
+function setBackgroundImg() {
+  const root = document.documentElement
+  //PC端的背景图片
+  const imgFilePC = [
+    'static/安逸舒适/image.png',
+    'static/海洋女孩/image.png',
+    'static/书房夜晚/image.png',
+    'dynamic/尼尔：机械纪元 团队/Nier-Automata-Team.webm',
+    'dynamic/向往航天的女孩/Toy-Aeroplane.webm',
+  ]
+  for (let i = 1; i <= 10; i++) {
+    //添加另外一个文件夹的图片
+    imgFilePC.push(`landscape/background${i}.jpg`)
+  }
+
+  const imgFileMobile = [
+    // 'dynamic-mobile/幻觉镇-gaako_illust/Hallucination_town.mp4',
+    // 'dynamic-mobile/chuva/chuva.mp4',
+    // 'dynamic-mobile/Doodle-小猫女仆降临/d12.mp4',
+  ]
+  for (let i = 1; i <= 4; i++) {
+    imgFileMobile.push(`static-mobile/000${i}/image.png`)
+  }
+
+  let newIndex = lastSelectedIndex.value
+
+  while (newIndex === lastSelectedIndex.value) {
+    if (isMobileDevice.value) {
+      newIndex = Math.floor(Math.random() * imgFileMobile.length)
+    } else {
+      newIndex = Math.floor(Math.random() * imgFilePC.length)
+    }
+  }
+  state.lastSelectedIndex = newIndex
+  let imgSrc = ''
+  if (isMobileDevice.value) {
+    imgSrc = imgFileMobile[newIndex]
+  } else {
+    imgSrc = imgFilePC[newIndex]
+  }
+
+  root.style.setProperty('--background-image-url', `url('/src/assets/img/wallpaper/${imgSrc}')`)
+}
+onBeforeMount(() => {
+  setBackgroundImg()
+})
 </script>
 
 <style scoped lang="scss">
@@ -92,9 +146,10 @@ const { circleUrl } = toRefs(state)
   }
 }
 .list-title {
-  width: 100%;
+  width: 95%;
   font-size: 24px;
   color: #fff;
+  margin-left: 2%;
   margin-bottom: 20px;
   display: flex;
   justify-content: flex-start;
@@ -113,7 +168,8 @@ const { circleUrl } = toRefs(state)
 .vapp-fullscreen-background::before {
   border-radius: 16px;
   content: '';
-  background-image: url('../assets/image.png');
+  // background-image: url('../assets/image.png');
+  background-image: var(--background-image-url);
   transition: background-image 0.8s ease;
   background-repeat: no-repeat;
   background-size: cover;

@@ -118,6 +118,6 @@ onMounted(() => {
   height: 270px;
   display: block;
   box-sizing: border-box;
-  width: 540px;
+  width: 100%;
 }
 </style>
