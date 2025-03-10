@@ -67,8 +67,8 @@ function setBackgroundImg() {
     'static/安逸舒适/image.png',
     'static/海洋女孩/image.png',
     'static/书房夜晚/image.png',
-    'dynamic/尼尔：机械纪元 团队/Nier-Automata-Team.webm',
-    'dynamic/向往航天的女孩/Toy-Aeroplane.webm',
+    // 'dynamic/尼尔：机械纪元 团队/Nier-Automata-Team.webm',
+    // 'dynamic/向往航天的女孩/Toy-Aeroplane.webm',
   ]
   for (let i = 1; i <= 10; i++) {
     //添加另外一个文件夹的图片
@@ -101,7 +101,7 @@ function setBackgroundImg() {
     imgSrc = imgFilePC[newIndex]
   }
 
-  root.style.setProperty('--background-image-url', `url('/src/assets/img/wallpaper/${imgSrc}')`)
+  root.style.setProperty('--background-image-url', `url('/img/wallpaper/${imgSrc}')`)
 }
 onBeforeMount(() => {
   setBackgroundImg()

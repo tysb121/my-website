@@ -12,18 +12,18 @@ defineOptions({
 })
 const skills = [
   'Vue.js',
-  'React',
+  'HTML',
   'JavaScript',
   'Node',
-  'Java',
-  'Python',
+  'CSS',
+  // 'Python',
   'linux',
   'Docker',
   'MySQL',
-  'MongoDB',
-  'AWS',
+  // 'MongoDB',
+  // 'AWS',
 ]
-const skillPoints = [85, 78, 88, 90, 80, 78, 85, 65, 82, 78, 70]
+const skillPoints = [85, 78, 88, 60, 80, 45, 50, 65,]
 
 function generateColors(count: number) {
   const colors = []
