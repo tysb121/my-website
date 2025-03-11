@@ -21,7 +21,7 @@
           <div class="app-item-btn">
             <!-- <div class="btn">🚀 前往</div> -->
             <div class="btn">
-              <el-image style="width: 25px;margin-right: 5px;" :src="item.icon"></el-image>
+              <el-image style="width: 25px; margin-right: 5px" :src="item.icon"></el-image>
               前往
             </div>
           </div>
@@ -39,52 +39,51 @@ interface AppItem {
   icon: string
 }
 const appList = ref<AppItem[]>([])
-
+const prefix = 'https://www.tysb121.cn/images/'
 onMounted(() => {
   appList.value = [
     {
-      imgSrc: '/img/wallpaper/app-box/pEEZToj.jpg',
+      imgSrc: prefix + 'pEEZToj.jpg',
       title: '博客',
       desc: '一些收藏的文章',
-      icon:'/img/icon/boke.png'
+      icon: '/img/icon/boke.png',
     },
     {
-      imgSrc: '/img/wallpaper/app-box/pEEZ0sO.jpg',
+      imgSrc: prefix + 'pEEZ0sO.jpg',
       title: '网址集',
       desc: '收藏的网站',
-      icon:'/img/icon/wangzhidiqiu.png'
+      icon: '/img/icon/wangzhidiqiu.png',
     },
     {
-      imgSrc: '/img/wallpaper/app-box/pEEZIeg.jpg',
+      imgSrc: prefix + 'pEEZIeg.jpg',
       title: '今日热榜',
       desc: '关注最新资讯新闻，工作之余摸摸鱼',
-      icon:'/img/icon/rebang.png'
+      icon: '/img/icon/rebang.png',
     },
     {
-      imgSrc: '/img/wallpaper/app-box/pEEZyod.jpg',
+      imgSrc: prefix + 'pEEZyod.jpg',
       title: '站点监测',
       desc: '流量访问监控',
-      icon:'/img/icon/jiance.png'
+      icon: '/img/icon/jiance.png',
     },
     {
-      imgSrc: '/img/wallpaper/app-box/pEEmOqU.png',
+      imgSrc: prefix + 'pEEmOqU.png',
       title: '面试题库',
       desc: '快来做题吧',
-      icon:'/img/icon/datitiku.png'
+      icon: '/img/icon/datitiku.png',
     },
     {
-      imgSrc: '/img/wallpaper/app-box/pEEnSi9.png',
+      imgSrc: prefix + 'pEEnSi9.png',
       title: '番剧列表',
       desc: 'What can I say',
-      icon:'/img/icon/fanju.png'
+      icon: '/img/icon/fanju.png',
     },
     {
-      imgSrc: '/img/wallpaper/app-box/pEEZfQf.jpg',
+      imgSrc: prefix + 'pEEZfQf.jpg',
       title: '意见反馈',
       desc: '反馈是进步的阶梯，吐槽是创新的源泉',
-      icon:'/img/icon/yijianfankui.png'
+      icon: '/img/icon/yijianfankui.png',
     },
-  
   ]
 })
 </script>
