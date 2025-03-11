@@ -19,7 +19,11 @@
           <div class="app-item-title">{{ item.title }}</div>
           <div class="app-item-desc">{{ item.desc }}</div>
           <div class="app-item-btn">
-            <div class="btn">🚀 前往</div>
+            <!-- <div class="btn">🚀 前往</div> -->
+            <div class="btn">
+              <el-image style="width: 25px;margin-right: 5px;" :src="item.icon"></el-image>
+              前往
+            </div>
           </div>
         </div>
       </el-col>
@@ -32,6 +36,7 @@ interface AppItem {
   imgSrc: string
   title: string
   desc: string
+  icon: string
 }
 const appList = ref<AppItem[]>([])
 
@@ -41,29 +46,52 @@ onMounted(() => {
       imgSrc: '/img/wallpaper/app-box/pEEZToj.jpg',
       title: '博客',
       desc: '一些收藏的文章',
+      icon:'/img/icon/boke.png'
     },
     {
       imgSrc: '/img/wallpaper/app-box/pEEZ0sO.jpg',
       title: '网址集',
       desc: '收藏的网站',
+      icon:'/img/icon/wangzhidiqiu.png'
     },
     {
       imgSrc: '/img/wallpaper/app-box/pEEZIeg.jpg',
       title: '今日热榜',
       desc: '关注最新资讯新闻，工作之余摸摸鱼',
+      icon:'/img/icon/rebang.png'
     },
     {
       imgSrc: '/img/wallpaper/app-box/pEEZyod.jpg',
       title: '站点监测',
       desc: '流量访问监控',
+      icon:'/img/icon/jiance.png'
     },
+    {
+      imgSrc: '/img/wallpaper/app-box/pEEmOqU.png',
+      title: '面试题库',
+      desc: '快来做题吧',
+      icon:'/img/icon/datitiku.png'
+    },
+    {
+      imgSrc: '/img/wallpaper/app-box/pEEnSi9.png',
+      title: '番剧列表',
+      desc: 'What can I say',
+      icon:'/img/icon/fanju.png'
+    },
+    {
+      imgSrc: '/img/wallpaper/app-box/pEEZfQf.jpg',
+      title: '意见反馈',
+      desc: '反馈是进步的阶梯，吐槽是创新的源泉',
+      icon:'/img/icon/yijianfankui.png'
+    },
+  
   ]
 })
 </script>
 <style lang="scss" scoped>
 .app-item {
   width: 100%;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(7px);
   border-radius: 5%;
   color: #fff;
@@ -92,7 +120,7 @@ onMounted(() => {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.8;
+    opacity: 0.6;
   }
   .app-item-title {
     line-height: 1.6;
@@ -139,6 +167,7 @@ onMounted(() => {
   overflow: hidden;
   cursor: pointer;
   border-radius: 5px;
+  vertical-align: middle;
   &:hover {
     background-color: rgba($color: #fff, $alpha: 0.1);
   }

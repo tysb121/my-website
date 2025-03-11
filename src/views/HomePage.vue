@@ -1,38 +1,46 @@
 <template>
-  <div class="home-page">
-    <div class="vapp-fullscreen-background"></div>
-    <div class="home-container">
-      <el-row align="middle" justify="center">
-        <el-col class="left-container" :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
-          <el-avatar :size="150" :src="circleUrl" />
-          <Introduction />
-          <div class="">
-            <polarchart />
-          </div>
-          <SocialLinks />
-          <Footer />
-        </el-col>
-        <el-col class="right-container" :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
-          <!-- <div class="welcometitle">Hi, I'm Kenny</div> -->
-          <div class="welcometitle" v-if="!isMobileDevice">Hi, I'm KOBE</div>
-          <el-row style="width: 100%" :gutter="24">
-            <el-col :xs="24" :sm="24" :md="24" :lg="16" :xl="16">
-              <hitokoto />
-            </el-col>
-            <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-              <DateWeather />
-            </el-col>
-          </el-row>
-          <div class="list-title">
-            <Icon size="20">
-              <Link />
-            </Icon>
-            应用列表
-          </div>
-          <ApplicationView />
-        </el-col>
-      </el-row>
-    </div>
+  <div class="home-page" :class="{ pd: !isMobileDevice }">
+    <!-- <transition name="fade">
+      <div class="loading" v-show="isloading">
+        <loader></loader>
+      </div>
+    </transition> -->
+    <Loading :isloading="isloading" />
+    <div class="vapp-fullscreen-background" :class="{ isMobile: isMobileDevice }"></div>
+    <transition name="slide-up">
+      <div class="home-container" v-if="containerFlag">
+        <el-row align="middle" justify="center">
+          <el-col class="left-container" :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
+            <el-avatar :size="150" :src="circleUrl" />
+            <Introduction />
+            <div class="">
+              <polarchart />
+            </div>
+            <SocialLinks />
+            <Footer />
+          </el-col>
+          <el-col class="right-container" :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
+            <!-- <div class="welcometitle">Hi, I'm Kenny</div> -->
+            <div class="welcometitle" v-if="!isMobileDevice">Hi, I'm KOBE</div>
+            <el-row style="width: 100%" :gutter="24">
+              <el-col :xs="24" :sm="24" :md="24" :lg="16" :xl="16">
+                <hitokoto />
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+                <DateWeather />
+              </el-col>
+            </el-row>
+            <div class="list-title">
+              <Icon size="20">
+                <Link />
+              </Icon>
+              应用列表
+            </div>
+            <ApplicationView />
+          </el-col>
+        </el-row>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -44,22 +52,28 @@ import Footer from './HomeComponents/Footer.vue'
 import DateWeather from '@/components/DateWeather.vue'
 import hitokoto from '@/components/hitokoto.vue'
 import ApplicationView from './HomeComponents/applicationView.vue'
+// import Loader from '@/components/Loader.vue'
+import Loading from '@/components/Loading.vue'
 import imgUrl from '@/assets/3.jpg'
-import { reactive, toRefs, onBeforeMount, computed } from 'vue'
+import { reactive, toRefs, onBeforeMount, computed, onMounted } from 'vue'
 import { Icon } from '@vicons/utils'
 import { Link } from '@vicons/fa' // 注意使用正确的类别
 
 const state = reactive({
   circleUrl: imgUrl,
   lastSelectedIndex: -1,
+  isloading: true,
+  bgImgSrc: '',
+  containerFlag: false,
 })
-const { circleUrl, lastSelectedIndex } = toRefs(state)
+const { circleUrl, lastSelectedIndex, isloading, containerFlag } = toRefs(state)
 
 // 计算属性来判断是否为移动端
 const isMobileDevice = computed(() => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 })
 
+// 设置背景图片
 function setBackgroundImg() {
   const root = document.documentElement
   //PC端的背景图片
@@ -100,25 +114,91 @@ function setBackgroundImg() {
   } else {
     imgSrc = imgFilePC[newIndex]
   }
+  state.bgImgSrc = `/img/wallpaper/${imgSrc}`
 
-  root.style.setProperty('--background-image-url', `url('/img/wallpaper/${imgSrc}')`)
+  root.style.setProperty('--background-image-url', `url('${state.bgImgSrc}')`)
 }
+
+function loadImage() {
+  const imageUrls = [state.bgImgSrc]
+  return new Promise((resolve, reject) => {
+    const imagePromises = imageUrls.map((url) => {
+      return new Promise((resolve, reject) => {
+        const imgs = new Image()
+        imgs.src = url
+        imgs.onload = () => resolve(true)
+        imgs.onerror = (err) => reject(err)
+      })
+    })
+
+    // 设置超时机制：2.5秒
+    const timeoutPromise = new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true)
+      }, 2500)
+    })
+
+    // 等待所有图片加载完成或超时
+    Promise.race([Promise.all(imagePromises), timeoutPromise]).then(() => {
+      // if(imageurl){
+      const img = new Image()
+      img.src = state.bgImgSrc
+      // resolve() 函数通将一个 Promise 对象从未完成状态转变为已完成状态
+      img.onload = () => {
+        resolve(true)
+      }
+      img.onerror = (err) => {
+        reject(err)
+      }
+      // }else{
+      //   const video = this.$refs.VdPlayer;
+      //   video.onloadedmetadata = () => {
+      //     setTimeout(() => {
+      //     }, "200");
+      //     resolve();
+      //   };
+      //   video.onerror = (err) => {resolve();};
+      // }
+    })
+  })
+}
+
 onBeforeMount(() => {
   setBackgroundImg()
+  loadImage().then(() => {
+    setTimeout(() => {
+      state.isloading = false
+      setTimeout(() => {
+        state.containerFlag = true
+      }, 500)
+    }, 1000)
+  })
+})
+onMounted(() => {
+  state.isloading = true
 })
 </script>
 
 <style scoped lang="scss">
+.pd {
+  padding: 1.7% 0.5%;
+}
 .home-page {
   width: 100%;
   height: 100vh;
   position: relative;
-  padding: 1.7% 0.5%;
+
   background-color: #282c34;
+  // overflow: hidden;
   .home-container {
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    // transform: translateY(10px);
+    // transition: transform 0.5s ease-out;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
   }
   .left-container {
     height: 95vh;
@@ -136,7 +216,7 @@ onBeforeMount(() => {
     justify-content: flex-start;
   }
   .welcometitle {
-    margin-top: 10px;
+    // margin-top: 10px;
     color: #fff;
     padding: 0 2rem;
     height: 90px;
@@ -150,7 +230,7 @@ onBeforeMount(() => {
   font-size: 24px;
   color: #fff;
   margin-left: 2%;
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -163,6 +243,15 @@ onBeforeMount(() => {
   top: 1.7%;
   left: 0.5%;
   //   z-index: -1;
+  &.isMobile {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    &::before{
+      border-radius: unset;
+    }
+  }
 }
 /* 添加一个::before伪元素降低背景图片的亮度，而不会影响background元素的其他内容 */
 .vapp-fullscreen-background::before {
@@ -180,5 +269,43 @@ onBeforeMount(() => {
   z-index: -1;
   /* 调整亮度值  */
   filter: brightness(85%);
+}
+// .loading {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   background-color: #282c34;
+//   z-index: 9999;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+
+/* 定义过渡效果 */
+.slide-up-enter-from {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.slide-up-enter-to {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.5s ease-out;
+}
+
+.slide-up-leave-from {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.slide-up-leave-to {
+  transform: translateY(20px);
+  opacity: 0;
 }
 </style>
