@@ -15,22 +15,33 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Icon } from "@vicons/utils";
+import { Icon } from '@vicons/utils'
 import { QuoteLeft, QuoteRight } from '@vicons/fa'
-import { reactive } from "vue";
+import { reactive, defineProps, watch } from 'vue'
 
+const props = defineProps({
+  config: {
+    type: Object,
+    default: () => {
+      return {
+        introduceTitle: '',
+        introduce: '',
+      }
+    },
+  },
+})
 // 简介区域文字
 const descriptionText = reactive({
-  hello: 'Hello! World!',
-  text: '一个建立于21世纪的小站，存活于互联网的边缘',
-});
-
+  hello: props.config.introduceTitle || 'Hello! World!',
+  text: props.config.introduce || '一个建立于21世纪的小站，存活于互联网的边缘',
+})
 </script>
 <style lang="scss" scoped>
 .description {
   padding: 1rem;
   // margin-top: 3.5rem;
-  max-width: 460px;
+  // max-width: 460px;
+  width: 80%;
   animation: fade 0.5s;
 
   .content {

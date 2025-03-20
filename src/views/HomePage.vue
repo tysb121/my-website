@@ -31,8 +31,8 @@
       <div class="home-container" v-if="containerFlag">
         <el-row align="middle" justify="center">
           <el-col class="left-container" :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
-            <el-avatar :size="150" :src="circleUrl" />
-            <Introduction />
+            <el-avatar :size="150" :src="avatarUrl" />
+            <Introduction :config="configObj" />
             <div class="">
               <polarchart />
             </div>
@@ -41,7 +41,7 @@
           </el-col>
           <el-col class="right-container" :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
             <!-- <div class="welcometitle">Hi, I'm Kenny</div> -->
-            <div class="welcometitle" v-if="!isMobileDevice">Hi, I'm KOBE</div>
+            <div class="welcometitle" v-if="!isMobileDevice">{{ welcomeText }}</div>
             <el-row style="width: 100%" :gutter="24">
               <el-col :xs="24" :sm="24" :md="24" :lg="16" :xl="16">
                 <hitokoto />
@@ -78,17 +78,21 @@ import imgUrl from '@/assets/3.jpg'
 import { reactive, toRefs, onBeforeMount, computed, onMounted, ref } from 'vue'
 import { Icon } from '@vicons/utils'
 import { Link } from '@vicons/fa' // 注意使用正确的类别
+import { getNewConfig } from '@/api/common'
 const VdPlayer = ref<HTMLVideoElement>()
+const configObj = ref<any>({})
 const state = reactive({
-  circleUrl: imgUrl,
+  avatarUrl: imgUrl,
   lastSelectedIndex: -1,
   isloading: true,
   bgImgSrc: '',
   containerFlag: false,
   videosrc: '',
   bgType: 1, //1为静态图片，2为动态视频
+  welcomeText: `Hi, I'm KOBE`,
 })
-const { circleUrl, lastSelectedIndex, isloading, containerFlag, videosrc, bgType } = toRefs(state)
+const { avatarUrl, lastSelectedIndex, isloading, containerFlag, videosrc, bgType, welcomeText } =
+  toRefs(state)
 
 // 计算属性来判断是否为移动端
 const isMobileDevice = computed(() => {
@@ -194,15 +198,24 @@ function loadImage() {
   })
 }
 
-onBeforeMount(() => {
+async function getConfig() {
+  await getNewConfig().then((res) => {
+    if (res.code === 0 && res.data) {
+      configObj.value = res.data
+      avatarUrl.value = res.data.avatar
+      welcomeText.value = res.data.welcomeText
+    }
+  })
+}
+
+onBeforeMount(async () => {
   setBackgroundImg()
+  await getConfig()
   loadImage().then(() => {
+    state.isloading = false
     setTimeout(() => {
-      state.isloading = false
-      setTimeout(() => {
-        state.containerFlag = true
-      }, 500)
-    }, 1000)
+      state.containerFlag = true
+    }, 500)
   })
 })
 onMounted(() => {
@@ -286,7 +299,7 @@ onMounted(() => {
     top: 0;
     left: 0;
     border-radius: unset;
-}
+  }
 }
 .vapp-fullscreen-background {
   position: fixed;

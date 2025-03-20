@@ -41,3 +41,7 @@ export const getOtherWeather = async () => {
 export const getWebSiteList = async (params: object) => {
   return await http.get('/api/webSite/list', params)
 }
+
+export const getNewConfig = async () => {
+  return await http.get('/api/web-config/getNewConfig')
+}
